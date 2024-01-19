@@ -15,7 +15,9 @@ export default function LoginRegisterForm() {
         </div>
 
         <div className={classes["form-container"]}>
-          <span>Login to your account</span>
+          <span className={classes["login-register-text"]}>
+            Login to your account
+          </span>
           <form method="" action="">
             {/* email field */}
             <label>Email address</label>
@@ -30,7 +32,7 @@ export default function LoginRegisterForm() {
             />
             {/* forget password */}
             <div className="forget-password-text">Forget password?</div>
-            {/* submit button */}
+            {/* login button */}
             <button type="submit" className={classes["login-button"]}>
               Login
             </button>
@@ -38,6 +40,9 @@ export default function LoginRegisterForm() {
           <div className="google-oauth-container">
             <div className="third-party-auth">Or login with</div>
             <GoogleLogin />
+          </div>
+          <div className={classes["register-new-text"]}>
+            Register new account
           </div>
         </div>
       </div>

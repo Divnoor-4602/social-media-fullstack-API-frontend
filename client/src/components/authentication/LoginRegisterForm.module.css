@@ -18,17 +18,22 @@
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   border-radius: 25px;
   padding: 1.5rem;
-  gap: 2rem;
+  gap: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 60vh;
-  width: 45%;
+  max-width: 31.25rem;
   margin: auto;
+  background-image: url("../../assets/social-form-bg.svg");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: 20rem;
 }
 
-.form-container span {
+.login-register-text {
   font-weight: 700;
+  margin-bottom: 1rem;
   color: white;
   font-size: 1.5rem;
   align-self: flex-start;
@@ -51,4 +56,19 @@
 .login-button:hover {
   box-shadow: 1px 2px 4px 0px rgba(201, 234, 240, 0.2);
   transform: scale(1.1);
+}
+
+.register-new-text {
+  align-self: flex-start;
+  margin-top: 1rem;
+  color: white;
+  font-size: 1rem;
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+  transition: text-decoration-color 200ms ease-in;
+}
+
+.register-new-text:hover {
+  text-decoration-color: #0093ff;
 }

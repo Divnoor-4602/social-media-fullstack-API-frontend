@@ -55,9 +55,16 @@ input:focus::placeholder {
   gap: 0.5rem;
   background-color: white;
   border: none;
-  padding: 0.25rem 0.75rem;
+  color: black;
+  padding: 0.5rem 1.5rem;
   border-radius: 15px;
   margin-top: 1rem;
+  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.google-oauth-submit:hover {
+  background-color: red;
+  color: white;
 }
 
 .third-party-auth {
