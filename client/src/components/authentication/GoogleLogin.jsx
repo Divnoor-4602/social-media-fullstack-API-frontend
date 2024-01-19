@@ -9,6 +9,7 @@ export default function GoogleLogin() {
         <img src={googleIcon} alt="google-icon" width={"25px"} />
         <span className={classes["continue"]}>Google</span>
       </button>
+      {}
     </>
   );
 }

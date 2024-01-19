@@ -6,8 +6,12 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api", (req, res) => {
-  res.json({ user: ["user1", "user2", "user3"] });
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
+
+app.post("/register", (req, res) => {
+  console.log(req.body);
 });
 
 app.listen(port, () => {
