@@ -34,19 +34,21 @@ export default function LoginRegisterForm({ onSignIn }) {
   }
 
   function handleInvalidDataMessage(statusCode) {
+    console.log("call");
     if (form === "login") {
       if (statusCode == 200) {
         onSignIn();
       } else if (statusCode == 400) {
         setInvalidDataMessage("Invalid password");
       } else if (statusCode == 404) {
-        setInvalidDataMessage("Email not found!");
+        setInvalidDataMessage("User not found, please check your email!");
       }
     } else if (form === "register") {
       if (statusCode == 400) {
         setInvalidDataMessage("Invalid password");
       } else if (statusCode == 404) {
-        setInvalidDataMessage("Email already exists");
+        setInvalidDataMessage("User already exists");
+        console.log(statusCode);
       } else if (statusCode == 200) {
         onSignIn();
       }
@@ -57,13 +59,17 @@ export default function LoginRegisterForm({ onSignIn }) {
     // figuring out the route
     let routeToReach;
     form === "login" ? (routeToReach = "login") : (routeToReach = "register");
+
     // making a post request to the following route
+
     axios
       .post(`/auth/${routeToReach}`, dataToSend)
       .then((res) => {
         handleInvalidDataMessage(res.status);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        handleInvalidDataMessage(err.response.status);
+      });
 
     setDataToSend((prevValue) => ({
       ...prevValue,
@@ -84,7 +90,13 @@ export default function LoginRegisterForm({ onSignIn }) {
           <span className={classes["login-register-text"]}>
             {form === "login" ? "Login to your account" : "Create your account"}
           </span>
-          <span></span>
+
+          {invalidDataMessage != "" && (
+            <span className={classes["invalid-message"]}>
+              {invalidDataMessage}
+            </span>
+          )}
+
           <form>
             {/* fullname field */}
             {form != "login" && (
@@ -131,6 +143,8 @@ export default function LoginRegisterForm({ onSignIn }) {
               className={classes["login-button"]}
               onClick={(e) => {
                 e.preventDefault();
+                console.log(invalidDataMessage);
+                console.log(dataToSend);
                 handleDataPost(e);
               }}
             >

@@ -12,6 +12,12 @@
   margin-top: 5%;
 }
 
+.invalid-message {
+  color: red;
+  align-self: flex-start;
+  font-size: 0.8rem;
+}
+
 .form-container {
   background-color: #152733;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
@@ -22,7 +28,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 65vh;
+  height: 68vh;
   max-width: 31.25rem;
   margin: auto;
   background-image: url("../../assets/social-form-bg.svg");
@@ -33,7 +39,6 @@
 
 .login-register-text {
   font-weight: 700;
-  margin-bottom: 1rem;
   color: white;
   font-size: 1.5rem;
   align-self: flex-start;
