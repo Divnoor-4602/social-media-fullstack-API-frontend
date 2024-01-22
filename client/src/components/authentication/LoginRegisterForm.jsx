@@ -1,7 +1,3 @@
-// todo: add a route to the action attribute to send in the login data
-// todo: add input field css for invalid input
-// todo: send this data to express
-
 import React, { useState } from "react";
 import axios from "axios";
 import classes from "./LoginRegisterForm.module.css";

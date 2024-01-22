@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       "/auth/register": "http://localhost:3000",
       "/auth/login": "http://localhost:3000",
+      "/auth/forget": "http://localhost:3000",
     },
   },
 });
