@@ -1,20 +1,21 @@
 // todo: add a route to the action attribute to send in the login data
 // todo: add input field css for invalid input
-// todo: onchange: change the form data to send
+// todo: send this data to express
 
 import React, { useState } from "react";
+import axios from "axios";
 import classes from "./LoginRegisterForm.module.css";
 import GoogleLogin from "./GoogleLogin.jsx";
+import FacebookLogin from "./FacebookLogin.jsx";
 
 export default function LoginRegisterForm() {
-  const [form, setForm] = useState("login");
+  const [form, setForm] = useState("register");
+
   const [dataToSend, setDataToSend] = useState({
     fullname: "",
     email: "",
     password: "",
   });
-
-  function handleFormInputs() {}
 
   function handleFormChange() {
     if (form === "login") {
@@ -22,6 +23,31 @@ export default function LoginRegisterForm() {
     } else if (form === "register") {
       setForm("login");
     }
+  }
+
+  function handleFormInputs(event) {
+    setDataToSend((prevValue) => ({
+      ...prevValue,
+      [event.target.id]: event.target.value,
+    }));
+  }
+
+  function handleDataPost() {
+    // figuring out the route
+    let routeToReach;
+    form === "login" ? (routeToReach = "login") : (routeToReach = "register");
+    // making a post request to the following route
+    axios
+      .post(`/auth/${routeToReach}`, dataToSend)
+      .then((res) => console.log(res.status + " " + res.data))
+      .catch((err) => console.log(err));
+
+    setDataToSend((prevValue) => ({
+      ...prevValue,
+      fullname: "",
+      email: "",
+      password: "",
+    }));
   }
 
   return (
@@ -35,38 +61,64 @@ export default function LoginRegisterForm() {
           <span className={classes["login-register-text"]}>
             {form === "login" ? "Login to your account" : "Create your account"}
           </span>
-          <form method="post" action="/register">
+          <form>
             {/* fullname field */}
             {form != "login" && (
               <>
                 <label>Full Name</label>
-                <input type="name" placeholder="Enter your name" required />
+                <input
+                  type="name"
+                  placeholder="Enter your name"
+                  id="fullname"
+                  value={dataToSend["fullname"]}
+                  required
+                  onChange={handleFormInputs}
+                />
               </>
             )}
 
             {/* email field */}
             <label>Email address</label>
-            <input type="email" placeholder="example@gmail.com" required />
+            <input
+              type="email"
+              id="email"
+              placeholder="example@gmail.com"
+              required
+              onChange={handleFormInputs}
+              value={dataToSend["email"]}
+            />
             {/* password field */}
             <label>Password</label>
             <input
               type="password"
               placeholder="Enter your password"
+              id="password"
+              onChange={handleFormInputs}
+              value={dataToSend["password"]}
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
               required
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
             />
             {/* forget password */}
             {form === "login" && (
               <div className="forget-password-text">Forget password?</div>
             )}
             {/* login button */}
-            <button type="submit" className={classes["login-button"]}>
+            <button
+              className={classes["login-button"]}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDataPost(e);
+              }}
+            >
               {form === "login" ? "Login" : "Register"}
             </button>
           </form>
           <div className="google-oauth-container">
             <div className="third-party-auth">Or login with</div>
-            <GoogleLogin />
+            <div className="button-container">
+              <GoogleLogin />
+              <FacebookLogin />
+            </div>
           </div>
           <div
             className={classes["register-new-text"]}

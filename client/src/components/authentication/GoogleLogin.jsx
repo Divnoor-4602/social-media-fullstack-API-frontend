@@ -1,5 +1,5 @@
 import React from "react";
-import googleIcon from "../../assets/google-plus.svg";
+import googleIcon from "../../assets/google-icon.svg";
 import classes from "../authentication/GoogleLogin.module.css";
 
 export default function GoogleLogin() {
@@ -9,7 +9,6 @@ export default function GoogleLogin() {
         <img src={googleIcon} alt="google-icon" width={"25px"} />
         <span className={classes["continue"]}>Google</span>
       </button>
-      {}
     </>
   );
 }

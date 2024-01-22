@@ -1,0 +1,26 @@
+.facebook-oauth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 0.5rem 1.25rem;
+  border-radius: 15px;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.facebook-oauth-submit:hover {
+  background-color: #316ff6;
+  color: white;
+}
+
+.continue {
+  font-size: 1rem;
+  font-weight: 200;
+  margin-top: 0.2%;
+  margin-right: 15%;
+}
