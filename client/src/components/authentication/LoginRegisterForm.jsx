@@ -8,8 +8,9 @@ import classes from "./LoginRegisterForm.module.css";
 import GoogleLogin from "./GoogleLogin.jsx";
 import FacebookLogin from "./FacebookLogin.jsx";
 
-export default function LoginRegisterForm() {
+export default function LoginRegisterForm({ onSignIn }) {
   const [form, setForm] = useState("register");
+  const [invalidDataMessage, setInvalidDataMessage] = useState("");
 
   const [dataToSend, setDataToSend] = useState({
     fullname: "",
@@ -32,6 +33,26 @@ export default function LoginRegisterForm() {
     }));
   }
 
+  function handleInvalidDataMessage(statusCode) {
+    if (form === "login") {
+      if (statusCode == 200) {
+        onSignIn();
+      } else if (statusCode == 400) {
+        setInvalidDataMessage("Invalid password");
+      } else if (statusCode == 404) {
+        setInvalidDataMessage("Email not found!");
+      }
+    } else if (form === "register") {
+      if (statusCode == 400) {
+        setInvalidDataMessage("Invalid password");
+      } else if (statusCode == 404) {
+        setInvalidDataMessage("Email already exists");
+      } else if (statusCode == 200) {
+        onSignIn();
+      }
+    }
+  }
+
   function handleDataPost() {
     // figuring out the route
     let routeToReach;
@@ -39,7 +60,9 @@ export default function LoginRegisterForm() {
     // making a post request to the following route
     axios
       .post(`/auth/${routeToReach}`, dataToSend)
-      .then((res) => console.log(res.status + " " + res.data))
+      .then((res) => {
+        handleInvalidDataMessage(res.status);
+      })
       .catch((err) => console.log(err));
 
     setDataToSend((prevValue) => ({
@@ -61,6 +84,7 @@ export default function LoginRegisterForm() {
           <span className={classes["login-register-text"]}>
             {form === "login" ? "Login to your account" : "Create your account"}
           </span>
+          <span></span>
           <form>
             {/* fullname field */}
             {form != "login" && (
