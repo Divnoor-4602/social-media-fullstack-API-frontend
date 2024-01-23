@@ -1,9 +1,17 @@
 import mongoose from "mongoose";
 
 // database setup
-mongoose.connect(
-  "mongodb+srv://divnoorsingh4602:Divnoor@notmyspace.ya7dgto.mongodb.net/?retryWrites=true&w=majority"
-);
+
+const connectUserDB = () => {
+  mongoose
+    .connect(
+      "mongodb+srv://divnoorsingh4602:Divnoor@notmyspace.ya7dgto.mongodb.net/?retryWrites=true&w=majority"
+    )
+    .then("succesfully connected")
+    .catch((err) => console.log(err));
+};
+
+connectUserDB();
 
 // user database schema
 const userSchema = new mongoose.Schema({

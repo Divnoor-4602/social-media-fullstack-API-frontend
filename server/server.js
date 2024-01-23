@@ -52,7 +52,7 @@ app.post("/auth/register", async (req, res) => {
         console.log("error while hashing " + err);
       } else {
         // create a user if hashing succesful
-        const userExists = await User.findOne({ email: email });
+        const userExists = await User.find({ email: email });
         if (userExists == null) {
           createNewUser(fullname, email, hashGenerated);
           res.sendStatus(200);
