@@ -53,7 +53,7 @@ app.post("/auth/register", async (req, res) => {
       } else {
         // create a user if hashing succesful
         const userExists = await User.find({ email: email });
-        if (userExists == null) {
+        if (userExists.length === 0) {
           createNewUser(fullname, email, hashGenerated);
           res.sendStatus(200);
           return;
@@ -84,7 +84,7 @@ app.post("/auth/login", async (req, res) => {
       } else {
         if (result) {
           // valid credentials login succesful
-          res.status(200).send(true);
+          res.status(200).send({ name: user.fullname });
           return;
         } else {
           // invalid password
@@ -103,6 +103,45 @@ app.post("/auth/login", async (req, res) => {
 // route to update password
 app.post("/auth/forget", (req, res) => {
   // todo: get the user by email and update their password, in the form or through sending a gmail
+});
+
+// Social Media Posts
+
+// create a post
+app.post("/posts/create", async (req, res) => {
+  let postsToAdd;
+  const content = req.body.postContent;
+  const emailToUpdate = req.body.email;
+  const postUploadTime = req.body.postTime;
+  console.log(content + " " + emailToUpdate + " " + postUploadTime);
+
+  // fetching posts of the current user
+  let user = await User.findOne({ email: emailToUpdate });
+  // check if the user have any prior posts
+  if (user.posts == undefined) {
+    postsToAdd = [];
+  } else {
+    postsToAdd = [...user.posts];
+  }
+  postsToAdd.push({
+    postContent: content,
+    postTime: postUploadTime,
+  });
+  //  finding the user and updating the posts
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: emailToUpdate },
+      { posts: postsToAdd },
+      { new: true }
+    );
+    console.log(updatedUser);
+    // successfully posted
+    res.status(200).send();
+  } catch (error) {
+    // error while posting
+    res.status(300).send();
+    console.log(error);
+  }
 });
 
 app.listen(port, () => {

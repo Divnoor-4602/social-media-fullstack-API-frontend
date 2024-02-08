@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  posts: String,
+  posts: { type: Object },
   likes: String,
   comments: String,
 });

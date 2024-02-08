@@ -1,15 +1,56 @@
 import React, { useState } from "react";
 import createNewPost from "../../assets/edit-icon.svg";
-import examplePfp from "../../assets/example-pfp.png";
+import IndividualPost from "./IndividualPost";
+
+import axios from "axios";
+
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 export default function CreatePost({ currentUserEmail, currentUser }) {
   const [postText, setPostText] = useState("");
+  const [invalidPostContent, setInvalidPostContent] = useState(false);
 
   function handlePostText(e) {
     setPostText(e.target.value);
   }
 
-  function createUserDocumentPosts() {}
+  function createUserDocumentPosts() {
+    // getting the current time
+    const date = new Date();
+    const currrentMonth = months[date.getMonth()];
+    const currentDay = date.getDay();
+    const currentYear = date.getFullYear();
+    const dateToSend = currrentMonth + " " + currentDay + ", " + currentYear;
+
+    if (postText != "") {
+      axios
+        .post("/posts/create", {
+          email: currentUserEmail,
+          postContent: postText,
+          postTime: dateToSend,
+        })
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error));
+
+      // empty the input field
+      setPostText("");
+    } else {
+      setInvalidPostContent(true);
+    }
+  }
 
   return (
     <>
@@ -34,11 +75,21 @@ export default function CreatePost({ currentUserEmail, currentUser }) {
         <div className="flex justify-between">
           <input
             placeholder="What's on your mind?"
-            className="placeholder:text-xs px-4 py-3 w-full focus-visible:outline-none bg-slate-800 rounded-l-xl font-light text-md"
+            className={
+              invalidPostContent
+                ? "placeholder:text-xs px-4 py-3 w-full focus-visible:outline-none bg-slate-800 rounded-l-xl font-light text-md border-l border-red-500"
+                : "placeholder:text-xs px-4 py-3 w-full focus-visible:outline-none bg-slate-800 rounded-l-xl font-light text-md"
+            }
             value={postText}
             onChange={handlePostText}
+            required
           ></input>
-          <button className="bg-slate-700 text-md px-3 rounded-r-lg hover:bg-cyan-700 transition duration-200 group h-12">
+          <button
+            className="bg-slate-700 text-md px-3 rounded-r-lg hover:bg-cyan-700 transition duration-200 group h-12"
+            onClick={() => {
+              createUserDocumentPosts();
+            }}
+          >
             <img
               src={createNewPost}
               alt="new post icon"
@@ -47,38 +98,20 @@ export default function CreatePost({ currentUserEmail, currentUser }) {
           </button>
         </div>
         {/* post timeline */}
-        <div>
+        <div className="flex flex-col space-y-8">
           <div className="text-2xl text-center font-bold mb-8">Timeline</div>
-          {/* each post */}
-          <div className="flex flex-col gap-4 pl-4 pb-8 bg-slate-800 rounded-xl shadow-xl hover:scale-105 duration-300">
-            <div className="mt-8 flex items-center justify-between">
-              <div className="flex items-center">
-                {/* pfp */}
-                <div className="p-2 border rounded-full border-cyan-400 mr-4 hidden sm:block">
-                  <img src={examplePfp} alt="example-pfp" className="w-8" />
-                </div>
-                {/* name */}
-                <div className="font-semibold text-sm">{currentUser}</div>
-                {/* email */}
-                <div className="opacity-50 text-xs mt-0.5 ml-2">
-                  @{currentUserEmail}
-                </div>
-              </div>
-              <div>
-                {/* post time */}
-                <div className="text-xs opacity-50 font-light hidden lg:block mr-4">
-                  January 23, 2024
-                </div>
-              </div>
-            </div>
-            {/* post content */}
-            <div className="text-md font-light pr-4">
-              🎉 Exciting news! Just launched my new website 🚀 Check it out for
-              all things related to #technology, #innovation, and #creativity!
-              💻 Let's connect and explore together! 🌟 #WebsiteLaunch
-              #TechEnthusiast #StayCurious
-            </div>
-          </div>
+          <IndividualPost
+            currentUser={currentUser}
+            currentUserEmail={currentUserEmail}
+          />
+          <IndividualPost
+            currentUser={currentUser}
+            currentUserEmail={currentUserEmail}
+          />
+          <IndividualPost
+            currentUser={currentUser}
+            currentUserEmail={currentUserEmail}
+          />
         </div>
       </div>
     </>

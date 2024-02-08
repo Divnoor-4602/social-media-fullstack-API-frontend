@@ -5,18 +5,41 @@ import HomePage from "./components/HomePage.jsx";
 
 function App() {
   const [signInSuccessFul, setSignInSuccessful] = useState(false);
+  const [currentSignedInUser, setCurrentSignedInUser] = useState({
+    name: "",
+    email: "",
+  });
 
-  function handleSignInSuccessFul() {
+  function handleSignInSuccessFul(currentUser) {
     setSignInSuccessful(true);
+    setCurrentSignedInUser((prevValue) => {
+      return { ...prevValue, name: currentUser };
+    });
+  }
+
+  function handleCurrentSignedInUser(currentUser, currentUserEmail) {
+    setCurrentSignedInUser((prevValue) => {
+      return { ...prevValue, name: currentUser, email: currentUserEmail };
+    });
   }
 
   return (
     <>
       {signInSuccessFul ? (
-        <HomePage />
+        <HomePage
+          currentUser={currentSignedInUser["name"]}
+          currentUserEmail={currentSignedInUser["email"]}
+        />
       ) : (
-        <LoginRegisterForm onSignIn={handleSignInSuccessFul} />
+        <LoginRegisterForm
+          onSignIn={handleSignInSuccessFul}
+          getCurrentUser={handleCurrentSignedInUser}
+        />
       )}
+      {/* <HomePage
+        currentUser={"Divnoor"}
+        currentUserEmail={"divnoor@gmail.com"}
+      /> */}
     </>
   );
 }

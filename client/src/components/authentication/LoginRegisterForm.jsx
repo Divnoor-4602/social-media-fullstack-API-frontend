@@ -4,7 +4,7 @@ import classes from "./LoginRegisterForm.module.css";
 import GoogleLogin from "./GoogleLogin.jsx";
 import FacebookLogin from "./FacebookLogin.jsx";
 
-export default function LoginRegisterForm({ onSignIn }) {
+export default function LoginRegisterForm({ onSignIn, getCurrentUser }) {
   const [form, setForm] = useState("register");
   const [invalidDataMessage, setInvalidDataMessage] = useState("");
 
@@ -29,11 +29,10 @@ export default function LoginRegisterForm({ onSignIn }) {
     }));
   }
 
-  function handleInvalidDataMessage(statusCode) {
-    console.log("call");
+  function handleInvalidDataMessage(statusCode, username) {
     if (form === "login") {
       if (statusCode == 200) {
-        onSignIn();
+        onSignIn(username);
       } else if (statusCode == 400) {
         setInvalidDataMessage("Invalid password");
       } else if (statusCode == 404) {
@@ -61,7 +60,8 @@ export default function LoginRegisterForm({ onSignIn }) {
     axios
       .post(`/auth/${routeToReach}`, dataToSend)
       .then((res) => {
-        handleInvalidDataMessage(res.status);
+        console.log(res);
+        handleInvalidDataMessage(res.status, res.data.name);
       })
       .catch((err) => {
         handleInvalidDataMessage(err.response.status);
@@ -101,6 +101,7 @@ export default function LoginRegisterForm({ onSignIn }) {
                 <input
                   type="name"
                   placeholder="Enter your name"
+                  className={classes["input-text"]}
                   id="fullname"
                   value={dataToSend["fullname"]}
                   required
@@ -114,6 +115,7 @@ export default function LoginRegisterForm({ onSignIn }) {
             <input
               type="email"
               id="email"
+              className={classes["input-text"]}
               placeholder="example@gmail.com"
               required
               onChange={handleFormInputs}
@@ -124,6 +126,7 @@ export default function LoginRegisterForm({ onSignIn }) {
             <input
               type="password"
               placeholder="Enter your password"
+              className={classes["input-text"]}
               id="password"
               onChange={handleFormInputs}
               value={dataToSend["password"]}
@@ -142,6 +145,7 @@ export default function LoginRegisterForm({ onSignIn }) {
                 console.log(invalidDataMessage);
                 console.log(dataToSend);
                 handleDataPost(e);
+                getCurrentUser(dataToSend["fullname"], dataToSend["email"]);
               }}
             >
               {form === "login" ? "Login" : "Register"}
