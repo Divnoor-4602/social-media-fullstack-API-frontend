@@ -107,13 +107,45 @@ app.post("/auth/forget", (req, res) => {
 
 // Social Media Posts
 
+// fetch all posts
+app.get("/posts/all", async (req, res) => {
+  let totalPosts = [];
+  try {
+    const allUserPosts = await User.find({});
+    // creating a post object to render
+
+    for (const user of allUserPosts) {
+      for (const post of user.posts) {
+        totalPosts.push({
+          authorName: user.fullname,
+          authorEmail: user.email,
+          postTitle: post.title,
+          postContent: post.content,
+          postTime: post.postTime,
+          likes: post.likes,
+        });
+      }
+    }
+    console.log(totalPosts);
+
+    res.status(200).json(totalPosts);
+    return;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+});
+
 // create a post
 app.post("/posts/create", async (req, res) => {
   let postsToAdd;
+  const title = req.body.postTitle;
   const content = req.body.postContent;
   const emailToUpdate = req.body.email;
   const postUploadTime = req.body.postTime;
-  console.log(content + " " + emailToUpdate + " " + postUploadTime);
+  console.log(
+    title + " " + content + " " + emailToUpdate + " " + postUploadTime
+  );
 
   // fetching posts of the current user
   let user = await User.findOne({ email: emailToUpdate });
@@ -124,8 +156,10 @@ app.post("/posts/create", async (req, res) => {
     postsToAdd = [...user.posts];
   }
   postsToAdd.push({
+    title: title,
     postContent: content,
     postTime: postUploadTime,
+    likes: 0,
   });
   //  finding the user and updating the posts
   try {

@@ -2,13 +2,15 @@ import mongoose from "mongoose";
 
 // database setup
 
-const connectUserDB = () => {
-  mongoose
-    .connect(
+const connectUserDB = async () => {
+  try {
+    const connect = await mongoose.connect(
       "mongodb+srv://divnoorsingh4602:Divnoor@notmyspace.ya7dgto.mongodb.net/?retryWrites=true&w=majority"
-    )
-    .then("succesfully connected")
-    .catch((err) => console.log(err));
+    );
+    console.log("connected with database");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 connectUserDB();

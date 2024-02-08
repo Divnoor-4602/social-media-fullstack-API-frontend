@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileBar from "./socialMediaFiles/ProfileBar";
 import CreatePost from "./socialMediaFiles/CreatePost";
+import axios from "axios";
 
 export default function HomePage({ currentUser, currentUserEmail }) {
+  const [allPosts, setAllPosts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/posts/all")
+      .then((res) => {
+        console.log(res.data);
+        setAllPosts((prevValue) => [...prevValue, res.data]);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  function handleAllPosts(posts) {
+    setAllPosts((prevValue) => [...prevValue, posts]);
+  }
+
   return (
     <>
       {/* Global container */}
@@ -21,6 +38,8 @@ export default function HomePage({ currentUser, currentUserEmail }) {
             <CreatePost
               currentUserEmail={currentUserEmail}
               currentUser={currentUser}
+              posts={allPosts}
+              onAllPosts={handleAllPosts}
             />
           </div>
         </div>

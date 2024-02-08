@@ -10,6 +10,7 @@ export default defineConfig({
       "/auth/login": "http://localhost:3000",
       "/auth/forget": "http://localhost:3000",
       "/posts/create": "http://localhost:3000",
+      "/posts/all": "http://localhost:3000",
     },
   },
 });

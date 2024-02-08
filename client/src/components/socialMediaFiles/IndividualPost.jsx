@@ -1,9 +1,12 @@
 import React from "react";
 import examplePfp from "../../assets/example-pfp.png";
+import likeIcon from "../../assets/like-icon.svg";
+import commentIcon from "../../assets/comment-icon.svg";
 
 export default function IndividualPost({
   currentUser,
   currentUserEmail,
+  postTitle,
   postDate,
   postContent,
   postLikes,
@@ -39,6 +42,26 @@ export default function IndividualPost({
           things related to #technology, #innovation, and #creativity! 💻 Let's
           connect and explore together! 🌟 #WebsiteLaunch #TechEnthusiast
           #StayCurious
+        </div>
+        {/* likes and comments container */}
+        <div className="flex flex-col space-y-4">
+          {/* like container */}
+          <div className="flex gap-2 items-center">
+            <img
+              src={likeIcon}
+              alt="like-icon"
+              className="w-8 hover:scale-105 transition "
+            />
+            <div className="text-sm">233</div>
+          </div>
+          {/* comment container */}
+          <div className="">
+            <img
+              src={commentIcon}
+              alt="comment-icon"
+              className="w-8 hover:scale-105"
+            />
+          </div>
         </div>
       </div>
     </>

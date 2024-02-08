@@ -45,7 +45,7 @@ export default function LoginRegisterForm({ onSignIn, getCurrentUser }) {
         setInvalidDataMessage("User already exists");
         console.log(statusCode);
       } else if (statusCode == 200) {
-        onSignIn();
+        onSignIn(username);
       }
     }
   }
