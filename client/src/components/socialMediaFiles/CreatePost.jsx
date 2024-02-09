@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import createNewPost from "../../assets/edit-icon.svg";
 import IndividualPost from "./IndividualPost";
 
@@ -22,12 +22,45 @@ const months = [
 export default function CreatePost({
   currentUserEmail,
   currentUser,
-  posts,
-  onAllPosts,
+  profileEditPage,
+  showProfile,
 }) {
   const [postText, setPostText] = useState("");
   const [postTitle, setPostTitle] = useState("");
   const [invalidPostContent, setInvalidPostContent] = useState(false);
+  const [allPosts, setAllPosts] = useState([]);
+  const [personalPosts, setPersonalPosts] = useState([]);
+
+  useEffect(() => {
+    console.log(currentUserEmail);
+    axios
+      .get("/posts/all")
+      .then((res) => {
+        return res.data;
+      })
+      .then((resData) => {
+        let currentPosts = [];
+        for (const post of resData) {
+          currentPosts.push(post);
+        }
+        setAllPosts((prevPosts) => [...currentPosts]);
+      })
+      .catch((error) => console.log(error));
+
+    axios
+      .post("/posts/personal", { email: currentUserEmail })
+      .then((res) => {
+        return res.data;
+      })
+      .then((resData) => {
+        let currentPosts = [];
+        for (const post of resData) {
+          currentPosts.push(post);
+        }
+        setPersonalPosts((prevPosts) => [...currentPosts]);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   function handlePostText(e) {
     setPostText(e.target.value);
@@ -37,14 +70,24 @@ export default function CreatePost({
     setPostTitle(e.target.value);
   }
 
-  function getNewPosts() {
-    axios
-      .get("/posts/all")
-      .then((res) => {
-        console.log(res.data);
-        onAllPosts(res.data);
-      })
-      .catch((error) => console.log(error));
+  function handleNewPosts() {
+    const date = new Date();
+    const currrentMonth = months[date.getMonth()];
+    const currentDay = date.getDay();
+    const currentYear = date.getFullYear();
+    const dateToSend = currrentMonth + " " + currentDay + ", " + currentYear;
+
+    setAllPosts((prevPosts) => [
+      ...prevPosts,
+      {
+        authorName: currentUser,
+        authorEmail: currentUserEmail,
+        postTitle: postTitle,
+        postContent: postText,
+        postTime: dateToSend,
+        likes: 0,
+      },
+    ]);
   }
 
   function createUserDocumentPosts() {
@@ -66,8 +109,7 @@ export default function CreatePost({
         .then((res) => console.log(res))
         .catch((error) => console.log(error));
 
-      //  fetch new posts
-      getNewPosts();
+      //  add new posts dynamically
 
       // empty the input field
       setPostText("");
@@ -83,7 +125,10 @@ export default function CreatePost({
       <div className="bg-slate-900 p-6 rounded-xl space-y-8 shadow-lg">
         {/* link container */}
         <div className="flex flex-col md:flex-row justify-evenly gap-4 border-b pb-12 border-slate-700">
-          <div className="text-cyan-300 font-semibold  bg-slate-700 transition duration-200 px-2 rounded-md py-1">
+          <div
+            className="text-cyan-300 font-semibold  bg-slate-700 transition duration-200 px-2 rounded-md py-1 "
+            onClick={profileEditPage}
+          >
             Home
           </div>
           <div className="hover:text-cyan-300 font-semibold  hover:bg-slate-700 transition duration-200 px-2 py-1 rounded-md">
@@ -92,7 +137,10 @@ export default function CreatePost({
           <div className="hover:text-cyan-300 font-semibold  hover:bg-slate-700 transition duration-200 px-2  py-1 rounded-md">
             Notifications
           </div>
-          <div className="hover:text-cyan-300 font-semibold  hover:bg-slate-700 transition duration-200 px-2 rounded-md py-1">
+          <div
+            className="hover:text-cyan-300 font-semibold  hover:bg-slate-700 transition duration-200 px-2 rounded-md py-1"
+            onClick={profileEditPage}
+          >
             Profile
           </div>
         </div>
@@ -130,6 +178,7 @@ export default function CreatePost({
               className="bg-slate-700 text-md px-3 rounded-r-lg hover:bg-cyan-700 transition duration-200 group h-12"
               onClick={() => {
                 createUserDocumentPosts();
+                handleNewPosts();
               }}
             >
               <img
@@ -141,17 +190,48 @@ export default function CreatePost({
           </div>
         </div>
 
-        {/* post timeline */}
+        {/* post timeline or edit posts */}
         <div className="flex flex-col space-y-8">
-          <div className="text-2xl text-center font-bold mb-8">Timeline</div>
-          {posts.map((post) => {
-            return (
-              <IndividualPost
-                currentUser={currentUser}
-                currentUserEmail={currentUserEmail}
-              />
-            );
-          })}
+          {showProfile ? (
+            <>
+              <div className="text-2xl text-center font-bold mb-8">
+                Posts you made
+              </div>
+              {personalPosts.map((post) => {
+                return (
+                  <IndividualPost
+                    key={post.postTitle}
+                    showEdit={true}
+                    currentUser={post.authorName}
+                    currentUserEmail={post.authorEmail}
+                    postTitle={post.postTitle}
+                    postContent={post.postContent}
+                    postLikes={post.likes}
+                    postDate={post.postTime}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <>
+              <div className="text-2xl text-center font-bold mb-8">
+                Timeline
+              </div>
+              {allPosts.map((post) => {
+                return (
+                  <IndividualPost
+                    key={post.postTitle}
+                    currentUser={post.authorName}
+                    currentUserEmail={post.authorEmail}
+                    postTitle={post.postTitle}
+                    postContent={post.postContent}
+                    postLikes={post.likes}
+                    postDate={post.postTime}
+                  />
+                );
+              })}
+            </>
+          )}
         </div>
       </div>
     </>

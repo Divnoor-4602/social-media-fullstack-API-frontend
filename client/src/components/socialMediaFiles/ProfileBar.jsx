@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import exampleProfilePicture from "../../assets/example-pfp.png";
 
-export default function ProfileBar({ currentUser, currentUserEmail }) {
+export default function ProfileBar({
+  currentUser,
+  currentUserEmail,
+  signOut,
+  profileEditPage,
+}) {
   return (
     <>
       {/* card container  */}
@@ -12,6 +17,7 @@ export default function ProfileBar({ currentUser, currentUserEmail }) {
             src={exampleProfilePicture}
             alt="example-profile-picture"
             className="w-12"
+            onClick={profileEditPage}
           />
         </div>
         {/* name, email and description */}
@@ -24,6 +30,13 @@ export default function ProfileBar({ currentUser, currentUserEmail }) {
           Passionate storyteller exploring worlds through words. 📚✨ | Lover of
           coffee, cats, and creativity. 🐱☕️🎨
         </div>
+        {/* logout button */}
+        <button
+          className="mt-8 w-full bg-red-700 py-2 rounded-xl shadow-xl hover:bg-red-600 transition duration-200 hover:-translate-y-1"
+          onClick={signOut}
+        >
+          Log out
+        </button>
       </div>
     </>
   );

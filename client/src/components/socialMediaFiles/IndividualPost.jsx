@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import examplePfp from "../../assets/example-pfp.png";
-import likeIcon from "../../assets/like-icon.svg";
+
 import commentIcon from "../../assets/comment-icon.svg";
+import pencilIcon from "../../assets/pencil-icon.svg";
+import LikesContainer from "./LikesContainer.jsx";
+import EditModal from "./EditModal.jsx";
 
 export default function IndividualPost({
   currentUser,
@@ -11,11 +14,18 @@ export default function IndividualPost({
   postContent,
   postLikes,
   postComments,
+  showEdit,
 }) {
+  const dialog = useRef();
+
+  function showModal() {
+    dialog.current.showModal();
+  }
+
   return (
     <>
       {/* each post */}
-      <div className="flex flex-col gap-4 pl-4 pb-8 bg-slate-800 rounded-xl shadow-xl hover:scale-105 duration-300">
+      <div className="flex flex-col gap-4 pl-4 pb-8 bg-slate-800 rounded-xl shadow-xl hover:scale-105 lg:hover:scale-100 duration-300">
         <div className="mt-8 flex items-center justify-between">
           <div className="flex items-center">
             {/* pfp */}
@@ -32,36 +42,53 @@ export default function IndividualPost({
           <div>
             {/* post time */}
             <div className="text-xs opacity-50 font-light hidden lg:block mr-4">
-              January 23, 2024
+              {postDate}
             </div>
           </div>
         </div>
+        {/* post title */}
+        <div className="text-xl font-semibold">{postTitle}</div>
         {/* post content */}
-        <div className="text-md font-light pr-4">
-          🎉 Exciting news! Just launched my new website 🚀 Check it out for all
-          things related to #technology, #innovation, and #creativity! 💻 Let's
-          connect and explore together! 🌟 #WebsiteLaunch #TechEnthusiast
-          #StayCurious
-        </div>
-        {/* likes and comments container */}
+        <div className="text-md font-light pr-4">{postContent}</div>
+        {/* likes and comments container and edit */}
         <div className="flex flex-col space-y-4">
-          {/* like container */}
-          <div className="flex gap-2 items-center">
-            <img
-              src={likeIcon}
-              alt="like-icon"
-              className="w-8 hover:scale-105 transition "
+          <div className="flex justify-between items-center">
+            <LikesContainer
+              postLikes={postLikes}
+              postTitle={postTitle}
+              postAuthorEmail={currentUserEmail}
             />
-            <div className="text-sm">233</div>
+            {/* edit container */}
+            {showEdit && (
+              <>
+                <div>
+                  <img
+                    src={pencilIcon}
+                    className="w-8 hover:scale-105 duration-300 mb-0.5 mr-8"
+                    onClick={showModal}
+                  />
+                </div>
+                <EditModal
+                  ref={dialog}
+                  currentUser={currentUser}
+                  currentUserEmail={currentUserEmail}
+                  postTitle={postTitle}
+                  postContent={postContent}
+                  postLikes={postLikes}
+                  postComments={postComments}
+                />
+              </>
+            )}
           </div>
+
           {/* comment container */}
-          <div className="">
+          {/* <div className="">
             <img
               src={commentIcon}
               alt="comment-icon"
-              className="w-8 hover:scale-105"
+              className="w-8 hover:scale-105 duration-300"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
