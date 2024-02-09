@@ -183,6 +183,43 @@ app.post("/posts/create", async (req, res) => {
   }
 });
 
+// delete a post
+app.post("/posts/remove", async (req, res) => {
+  const postTitle = req.body.postName;
+  const postContent = req.body.postText;
+  const postAuthor = req.body.postAuthorEmail;
+
+  // finding the post
+  try {
+    const postWriter = await User.findOne({ email: postAuthor });
+
+    let updatedPost = Array.from(postWriter.posts);
+    try {
+      for (let i = 0; i < Array.from(postWriter.posts).length; i++) {
+        if (updatedPost[i].title == postTitle) {
+          updatedPost.postContent = postContent;
+          break;
+        }
+      }
+
+      const updatePost = updatedPost.filter((post) => post.title != postTitle);
+      console.log("updated post" + updatePost);
+
+      // inserting the update document back
+      const updatedUser = await User.findOneAndUpdate(
+        { email: postAuthor },
+        { posts: updatePost },
+        { new: true }
+      );
+      console.log(updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // specific user posts
 app.post("/posts/personal", async (req, res) => {
   const emailToFind = req.body.email;

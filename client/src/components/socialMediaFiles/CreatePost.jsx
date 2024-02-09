@@ -201,7 +201,7 @@ export default function CreatePost({
                 return (
                   <IndividualPost
                     key={post.postTitle}
-                    showEdit={true}
+                    showEdit={profileEditPage}
                     currentUser={post.authorName}
                     currentUserEmail={post.authorEmail}
                     postTitle={post.postTitle}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileBar from "./socialMediaFiles/ProfileBar";
 import CreatePost from "./socialMediaFiles/CreatePost";
+import NewsMainPage from "./newsFiles/NewsMainPage";
 
 export default function HomePage({ currentUser, currentUserEmail, signOut }) {
   const [profileEditPage, setProfileEditPage] = useState(false);
@@ -32,8 +33,13 @@ export default function HomePage({ currentUser, currentUserEmail, signOut }) {
               showProfile={profileEditPage}
             />
           </div>
+          {/* news live */}
+          {/* <NewsMainPage /> */}
+          <div></div>
         </div>
       </div>
     </>
   );
 }
+
+// 276cc42f53d4445c8693ca2fcb872dd2
