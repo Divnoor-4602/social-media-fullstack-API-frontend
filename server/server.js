@@ -115,18 +115,23 @@ app.get("/posts/all", async (req, res) => {
     // creating a post object to render
 
     for (const user of allUserPosts) {
-      for (const post of user.posts) {
-        totalPosts.push({
-          authorName: user.fullname,
-          authorEmail: user.email,
-          postTitle: post.title,
-          postContent: post.content,
-          postTime: post.postTime,
-          likes: post.likes,
-        });
+      if (user.posts != undefined) {
+        for (const post of user.posts) {
+          totalPosts.push({
+            authorName: user.fullname,
+            authorEmail: user.email,
+            postTitle: post.title,
+            postContent: post.postContent,
+            postTime: post.postTime,
+            likes: post.likes,
+          });
+        }
+      } else {
+        console.log("no posts exist");
+        res.status(300);
+        return;
       }
     }
-    console.log(totalPosts);
 
     res.status(200).json(totalPosts);
     return;
@@ -174,6 +179,110 @@ app.post("/posts/create", async (req, res) => {
   } catch (error) {
     // error while posting
     res.status(300).send();
+    console.log(error);
+  }
+});
+
+// specific user posts
+app.post("/posts/personal", async (req, res) => {
+  const emailToFind = req.body.email;
+  console.log(emailToFind);
+  let totalPosts = [];
+  try {
+    const allUserPosts = await User.findOne({ email: emailToFind });
+    console.log(allUserPosts);
+    // creating a post object to render
+
+    if (allUserPosts != null) {
+      for (const post of allUserPosts.posts) {
+        totalPosts.push({
+          authorName: allUserPosts.fullname,
+          authorEmail: allUserPosts.email,
+          postTitle: post.title,
+          postContent: post.postContent,
+          postTime: post.postTime,
+          likes: post.likes,
+        });
+      }
+    } else {
+      console.log("no posts exist");
+      res.status(300);
+      return;
+    }
+
+    res.status(200).json(totalPosts);
+    return;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+});
+
+// edit posts
+app.put("/posts/edit", async (req, res) => {
+  const postTitle = req.body.postName;
+  const postContent = req.body.postText;
+  const postAuthor = req.body.postAuthorEmail;
+
+  // finding the post
+  try {
+    const postWriter = await User.findOne({ email: postAuthor });
+
+    let updatedPost = Array.from(postWriter.posts);
+    try {
+      for (let i = 0; i < Array.from(postWriter.posts).length; i++) {
+        if (updatedPost[i].title == postTitle) {
+          updatedPost[i].postContent = postContent;
+          break;
+        }
+      }
+
+      // inserting the update document back
+      const updatedUser = await User.findOneAndUpdate(
+        { email: postAuthor },
+        { posts: updatedPost },
+        { new: true }
+      );
+      console.log(updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// likes & comments
+
+// like updating
+app.put("/posts/likes", async (req, res) => {
+  const postTitle = req.body.postName;
+  const likeCount = req.body.likes;
+  const postAuthor = req.body.postAuthorEmail;
+
+  // finding the post
+  try {
+    const postWriter = await User.findOne({ email: postAuthor });
+    let updatedLikesPost = Array.from(postWriter.posts);
+    try {
+      for (let i = 0; i < Array.from(postWriter.posts).length; i++) {
+        if (updatedLikesPost[i].title == postTitle) {
+          updatedLikesPost[i].likes = likeCount;
+          break;
+        }
+      }
+
+      // inserting the update document back
+      const updatedUser = await User.findOneAndUpdate(
+        { email: postAuthor },
+        { posts: updatedLikesPost },
+        { new: true }
+      );
+      console.log(updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (error) {
     console.log(error);
   }
 });

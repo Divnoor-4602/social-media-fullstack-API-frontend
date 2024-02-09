@@ -17,11 +17,17 @@ function App() {
     });
   }
 
+  function handleSignOut() {
+    setSignInSuccessful(false);
+  }
+
   function handleCurrentSignedInUser(currentUser, currentUserEmail) {
     setCurrentSignedInUser((prevValue) => {
       return { ...prevValue, name: currentUser, email: currentUserEmail };
     });
   }
+
+  console.log(currentSignedInUser);
 
   return (
     <>
@@ -29,6 +35,7 @@ function App() {
         <HomePage
           currentUser={currentSignedInUser["name"]}
           currentUserEmail={currentSignedInUser["email"]}
+          signOut={handleSignOut}
         />
       ) : (
         <LoginRegisterForm
@@ -36,10 +43,6 @@ function App() {
           getCurrentUser={handleCurrentSignedInUser}
         />
       )}
-      {/* <HomePage
-        currentUser={"Divnoor"}
-        currentUserEmail={"divnoor@gmail.com"}
-      /> */}
     </>
   );
 }

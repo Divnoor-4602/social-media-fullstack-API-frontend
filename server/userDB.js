@@ -23,9 +23,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  posts: { type: Object },
-  likes: String,
-  comments: String,
+  posts: [
+    {
+      title: { type: String },
+      postContent: { type: String },
+      postTime: { type: String },
+      likes: { type: Number },
+    },
+  ],
 });
 
 // post schema
