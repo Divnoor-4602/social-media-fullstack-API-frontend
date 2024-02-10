@@ -1,7 +1,7 @@
 {
   "rewrites": [
       {
-          "source": "/api/(.*)",
+          "source": "/(.*)",
           "destination": "https://api-server-not-my-space.onrender.com"
       },
       {
