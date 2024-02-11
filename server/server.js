@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import User from "./userDB.js";
+import cors from "cors";
 
 // creating a server
 const app = express();
