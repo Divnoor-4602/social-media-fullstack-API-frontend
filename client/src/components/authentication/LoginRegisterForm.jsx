@@ -58,7 +58,10 @@ export default function LoginRegisterForm({ onSignIn, getCurrentUser }) {
     // making a post request to the following route
 
     axios
-      .post(`/auth/${routeToReach}`, dataToSend)
+      .post(
+        `https://api-server-not-my-space.onrender.com/auth/${routeToReach}`,
+        dataToSend
+      )
       .then((res) => {
         console.log(res);
         handleInvalidDataMessage(res.status, res.data.name);
