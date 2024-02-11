@@ -19,7 +19,7 @@ const EditModal = forwardRef(function EditModal(
   function editPostData() {
     console.log("editing");
     axios
-      .put("/posts/edit", {
+      .put("https://api-server-not-my-space.onrender.com/posts/edit", {
         postName: postTitle,
         postText: newPostContent.current.value,
         postAuthorEmail: currentUserEmail,
@@ -31,7 +31,7 @@ const EditModal = forwardRef(function EditModal(
   function deletePostData() {
     console.log("deleting");
     axios
-      .post("/posts/remove", {
+      .post("https://api-server-not-my-space.onrender.com/posts/remove", {
         postName: postTitle,
         postText: newPostContent.current.value,
         postAuthorEmail: currentUserEmail,

@@ -34,7 +34,7 @@ export default function CreatePost({
   useEffect(() => {
     console.log(currentUserEmail);
     axios
-      .get("/posts/all")
+      .get("https://api-server-not-my-space.onrender.com/posts/all")
       .then((res) => {
         return res.data;
       })

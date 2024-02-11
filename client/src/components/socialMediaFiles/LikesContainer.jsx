@@ -21,7 +21,7 @@ export default function LikesContainer({
   function updateLikeCountBack(process) {
     process == "inc"
       ? axios
-          .put("/posts/likes", {
+          .put("https://api-server-not-my-space.onrender.com/posts/likes", {
             postName: postTitle,
             likes: likes + 1,
             postAuthorEmail: postAuthorEmail,
@@ -29,7 +29,7 @@ export default function LikesContainer({
           .then((res) => console.log(res))
           .catch((err) => console.log(err))
       : axios
-          .put("/posts/likes", {
+          .put("https://api-server-not-my-space.onrender.com/posts/likes", {
             postName: postTitle,
             likes: likes - 1,
             postAuthorEmail: postAuthorEmail,
