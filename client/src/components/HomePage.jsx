@@ -25,7 +25,7 @@ export default function HomePage({ currentUser, currentUserEmail, signOut }) {
             />
           </div>
           {/* make a post container */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <CreatePost
               currentUserEmail={currentUserEmail}
               currentUser={currentUser}
@@ -34,8 +34,7 @@ export default function HomePage({ currentUser, currentUserEmail, signOut }) {
             />
           </div>
           {/* news live */}
-          {/* <NewsMainPage /> */}
-          <div></div>
+          <NewsMainPage className="md:grid-cols-1" />
         </div>
       </div>
     </>

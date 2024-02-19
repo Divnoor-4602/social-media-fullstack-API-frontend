@@ -21,3 +21,11 @@ The login / register form is built using **React** and **Module CSSS**, the form
 **Frontend**
 
 **Backend**
+
+### Desktop Current View
+
+![alt text](<WhatsApp Image 2024-02-18 at 10.31.00.jpeg>))
+
+### Mobile Current View
+
+![alt text](<WhatsApp Image 2024-02-18 at 10.30.10 (2).jpeg>)
